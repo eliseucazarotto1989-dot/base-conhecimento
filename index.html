@@ -826,23 +826,23 @@
         isSyncing = false;
     }
 
-    async function saveToGitHub(entries) {
+    async function saveToGitHub(entries, retries = 2) {
         const cfg = getConfig();
         if (!cfg) return;
 
         showSync('Salvando no GitHub...', '#f39c12');
 
         try {
-            // Get current SHA first (in case someone else changed the file)
-            try {
-                const getRes = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`, {
-                    headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-                if (getRes.ok) {
-                    const getData = await getRes.json();
-                    fileSha = getData.sha;
-                }
-            } catch {}
+            // Always fetch the latest SHA before saving
+            const getRes = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`, {
+                headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
+            });
+            if (getRes.ok) {
+                const getData = await getRes.json();
+                fileSha = getData.sha;
+            } else if (getRes.status === 404) {
+                fileSha = null;
+            }
 
             const content = new TextEncoder().encode(JSON.stringify(entries, null, 2));
             let binary = '';
@@ -866,6 +866,11 @@
                 },
                 body: JSON.stringify(body)
             });
+
+            if (res.status === 409 && retries > 0) {
+                // Conflict - retry with fresh SHA
+                return await saveToGitHub(entries, retries - 1);
+            }
 
             if (!res.ok) {
                 const errData = await res.json();
