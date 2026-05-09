@@ -780,25 +780,28 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     }
 
+    // ===== GITHUB CONFIG (defaults) =====
+    const DEFAULT_REPO = 'eliseucazarotto1989-dot/base-conhecimento';
+    const DEFAULT_PATH = 'data.json';
+    const DEFAULT_BRANCH = 'master';
+
     // ===== GITHUB API =====
     async function loadFromGitHub() {
         const cfg = getConfig();
-        if (!cfg) {
-            cachedEntries = getEntriesFromLocal();
-            render();
-            return;
-        }
+        const repo = cfg ? cfg.repo : DEFAULT_REPO;
+        const path = cfg ? cfg.path : DEFAULT_PATH;
+        const branch = cfg ? cfg.branch : DEFAULT_BRANCH;
 
         isSyncing = true;
         showSync('Carregando dados do GitHub...', '#00d4ff');
 
         try {
-            const res = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`, {
-                headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
-            });
+            const headers = { 'Accept': 'application/vnd.github.v3+json' };
+            if (cfg && cfg.token) headers['Authorization'] = `token ${cfg.token}`;
+
+            const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`, { headers });
 
             if (res.status === 404) {
-                // File doesn't exist yet, create it
                 cachedEntries = getEntriesFromLocal();
                 fileSha = null;
                 showSync('Arquivo nao encontrado no GitHub. Sera criado ao salvar.', '#f39c12');
@@ -815,7 +818,9 @@
             const decoded = new TextDecoder().decode(Uint8Array.from(content, c => c.charCodeAt(0)));
             cachedEntries = JSON.parse(decoded);
             saveEntriesToLocal(cachedEntries);
-            showSync(`Sincronizado com GitHub - ${cachedEntries.length} registros`, '#27ae60');
+            const syncMsg = cfg ? `Sincronizado com GitHub - ${cachedEntries.length} registros` : `Carregado do GitHub - ${cachedEntries.length} registros (configure Sync para editar)`;
+            const syncColor = cfg ? '#27ae60' : '#00d4ff';
+            showSync(syncMsg, syncColor);
             render();
         } catch (err) {
             console.error('GitHub load error:', err);
