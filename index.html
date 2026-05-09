@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Conhecimento - Assistência Técnica</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,.4);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header h1 .icon { font-size: 1.8rem; }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* ===== SEARCH ===== */
+        #searchInput {
+            padding: 10px 16px;
+            border: 2px solid #0f3460;
+            border-radius: 8px;
+            background: #16213e;
+            color: #fff;
+            font-size: 1rem;
+            width: 320px;
+            max-width: 100%;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        #searchInput:focus { border-color: #00d4ff; }
+        #searchInput::placeholder { color: #607080; }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: .95rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform .1s, box-shadow .2s;
+        }
+
+        .btn:active { transform: scale(.97); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #0095ff);
+            color: #0a0a1a;
+        }
+
+        .btn-primary:hover { box-shadow: 0 0 15px rgba(0,212,255,.4); }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: #fff;
+            padding: 6px 12px;
+            font-size: .8rem;
+        }
+
+        .btn-edit {
+            background: #f39c12;
+            color: #0a0a1a;
+            padding: 6px 12px;
+            font-size: .8rem;
+        }
+
+        .btn-secondary {
+            background: #2c3e50;
+            color: #fff;
+            padding: 6px 14px;
+            font-size: .85rem;
+        }
+
+        .btn-export {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        /* ===== FILTERS ===== */
+        .filters {
+            display: flex;
+            gap: 10px;
+            padding: 15px 30px;
+            background: #16213e;
+            flex-wrap: wrap;
+            align-items: center;
+            border-bottom: 1px solid #0f3460;
+        }
+
+        .filters label {
+            font-size: .85rem;
+            color: #8899aa;
+        }
+
+        .filter-tag {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #0f3460;
+            background: transparent;
+            color: #8899aa;
+            cursor: pointer;
+            font-size: .85rem;
+            transition: all .2s;
+        }
+
+        .filter-tag:hover, .filter-tag.active {
+            background: #00d4ff;
+            color: #0a0a1a;
+            border-color: #00d4ff;
+            font-weight: 600;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 25px 20px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: #16213e;
+            padding: 15px 20px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            border: 1px solid #0f3460;
+        }
+
+        .stat-card .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+
+        .stat-card .label {
+            font-size: .8rem;
+            color: #8899aa;
+            margin-top: 4px;
+        }
+
+        /* ===== CARDS ===== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: #16213e;
+            border-radius: 12px;
+            border: 1px solid #0f3460;
+            overflow: hidden;
+            transition: transform .2s, box-shadow .2s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,.3);
+            border-color: #00d4ff33;
+        }
+
+        .card-header {
+            padding: 16px 18px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #fff;
+            flex: 1;
+        }
+
+        .card-category {
+            font-size: .75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .cat-erro { background: #e74c3c33; color: #ff6b6b; }
+        .cat-instalacao { background: #2ecc7133; color: #6bffa8; }
+        .cat-comando { background: #f39c1233; color: #ffd166; }
+        .cat-tutorial { background: #9b59b633; color: #d4a5ff; }
+        .cat-link { background: #00d4ff33; color: #00d4ff; }
+        .cat-impressora { background: #e67e2233; color: #f0a860; }
+        .cat-outro { background: #95a5a633; color: #bdc3c7; }
+
+        .card-body {
+            padding: 0 18px 14px;
+        }
+
+        .card-desc {
+            font-size: .88rem;
+            color: #8899aa;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            padding: 10px 18px;
+            background: #0f3460;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .78rem;
+            color: #607080;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 2px 8px;
+            background: #1a1a2e;
+            border-radius: 4px;
+            font-size: .75rem;
+            color: #8899aa;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #607080;
+        }
+
+        .empty-state .big-icon { font-size: 4rem; margin-bottom: 15px; }
+        .empty-state p { font-size: 1.1rem; margin-bottom: 20px; }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 15px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: #1a1a2e;
+            border-radius: 14px;
+            width: 100%;
+            max-width: 700px;
+            border: 1px solid #0f3460;
+            animation: slideUp .25s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid #0f3460;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            color: #00d4ff;
+            font-size: 1.2rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #607080;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover { color: #e74c3c; }
+
+        .modal-body { padding: 22px; }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: .88rem;
+            color: #8899aa;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 8px;
+            color: #fff;
+            font-size: .95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #00d4ff;
+        }
+
+        .form-group textarea {
+            min-height: 140px;
+            resize: vertical;
+            font-family: 'Consolas', 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        .form-group small {
+            color: #607080;
+            font-size: .78rem;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            padding: 15px 22px;
+            border-top: 1px solid #0f3460;
+        }
+
+        /* ===== VIEW MODAL ===== */
+        .view-content h3 {
+            color: #00d4ff;
+            margin: 18px 0 8px;
+            font-size: 1rem;
+        }
+
+        .view-content h3:first-child { margin-top: 0; }
+
+        .view-content pre {
+            background: #0d1117;
+            padding: 14px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: .88rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid #21262d;
+        }
+
+        .view-content p {
+            line-height: 1.7;
+            color: #c0c8d0;
+            white-space: pre-wrap;
+        }
+
+        .view-content a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        .view-content a:hover { text-decoration: underline; }
+
+        .view-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .view-meta {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        /* ===== IMAGES ===== */
+        .image-upload-area {
+            border: 2px dashed #0f3460;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .2s, background .2s;
+            color: #607080;
+            font-size: .9rem;
+        }
+
+        .image-upload-area:hover {
+            border-color: #00d4ff;
+            background: #16213e;
+        }
+
+        .image-upload-area.dragover {
+            border-color: #00d4ff;
+            background: #0f3460;
+        }
+
+        .image-previews {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #0f3460;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-img {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: .8rem;
+            cursor: pointer;
+            line-height: 22px;
+            text-align: center;
+        }
+
+        .view-images {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .view-images img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            border: 1px solid #21262d;
+            cursor: pointer;
+            transition: transform .2s;
+        }
+
+        .view-images img:hover {
+            transform: scale(1.02);
+        }
+
+        .card-has-img {
+            color: #00d4ff;
+            font-size: .75rem;
+            margin-left: 6px;
+        }
+
+        /* ===== IMAGE LIGHTBOX ===== */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.9);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active { display: flex; }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 8px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            header { padding: 15px; }
+            header h1 { font-size: 1.2rem; }
+            #searchInput { width: 100%; }
+            .cards-grid { grid-template-columns: 1fr; }
+            main { padding: 15px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SYNC STATUS BAR -->
+<div id="syncBar" style="display:none; background:#0d1117; padding:8px 30px; text-align:center; font-size:.85rem; border-bottom:1px solid #0f3460;">
+    <span id="syncStatus"></span>
+</div>
+
+<!-- CONFIG MODAL -->
+<div class="modal-overlay" id="configModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Configurar Sincronizacao GitHub</h2>
+            <button class="modal-close" onclick="closeConfigModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:#8899aa; margin-bottom:15px; line-height:1.6;">
+                Para sincronizar seus dados entre dispositivos, configure seu token do GitHub.<br>
+                Crie um token em: <strong>GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)</strong><br>
+                Permissao necessaria: <strong>repo</strong>
+            </p>
+            <div class="form-group">
+                <label>GitHub Token *</label>
+                <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxx">
+            </div>
+            <div class="form-group">
+                <label>Repositorio (usuario/repo) *</label>
+                <input type="text" id="cfgRepo" placeholder="Ex: eliseucazarotto1989-dot/base-conhecimento">
+            </div>
+            <div class="form-group">
+                <label>Arquivo de dados</label>
+                <input type="text" id="cfgPath" value="data.json" placeholder="data.json">
+            </div>
+            <div class="form-group">
+                <label>Branch</label>
+                <input type="text" id="cfgBranch" value="main" placeholder="main">
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-danger" onclick="clearConfig()" style="margin-right:auto;">Limpar Config</button>
+            <button class="btn btn-secondary" onclick="closeConfigModal()">Cancelar</button>
+            <button class="btn btn-primary" onclick="saveConfig()">Salvar e Conectar</button>
+        </div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header>
+    <h1><span class="icon">🔧</span> Base de Conhecimento</h1>
+    <div class="header-actions">
+        <input type="text" id="searchInput" placeholder="Buscar por titulo, erro, comando..." oninput="filterCards()">
+        <button class="btn btn-primary" onclick="openFormModal()">+ Novo Registro</button>
+        <button class="btn btn-export" onclick="exportData()">Exportar</button>
+        <button class="btn btn-secondary" onclick="importData()">Importar</button>
+        <button class="btn btn-secondary" onclick="openConfigModal()" title="Configurar GitHub">Sync</button>
+    </div>
+</header>
+
+<!-- FILTERS -->
+<div class="filters">
+    <label>Filtrar:</label>
+    <button class="filter-tag active" data-cat="todos" onclick="setFilter('todos', this)">Todos</button>
+    <button class="filter-tag" data-cat="erro" onclick="setFilter('erro', this)">Erros</button>
+    <button class="filter-tag" data-cat="instalacao" onclick="setFilter('instalacao', this)">Instalação</button>
+    <button class="filter-tag" data-cat="comando" onclick="setFilter('comando', this)">Comandos</button>
+    <button class="filter-tag" data-cat="tutorial" onclick="setFilter('tutorial', this)">Tutoriais</button>
+    <button class="filter-tag" data-cat="impressora" onclick="setFilter('impressora', this)">Impressoras</button>
+    <button class="filter-tag" data-cat="link" onclick="setFilter('link', this)">Links/Downloads</button>
+    <button class="filter-tag" data-cat="outro" onclick="setFilter('outro', this)">Outros</button>
+</div>
+
+<!-- STATS -->
+<main>
+    <div class="stats" id="stats"></div>
+
+    <!-- CARDS GRID -->
+    <div class="cards-grid" id="cardsGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="big-icon">📂</div>
+        <p>Nenhum registro encontrado</p>
+        <button class="btn btn-primary" onclick="openFormModal()">Criar primeiro registro</button>
+    </div>
+</main>
+
+<!-- MODAL FORM (Criar/Editar) -->
+<div class="modal-overlay" id="formModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="formTitle">Novo Registro</h2>
+            <button class="modal-close" onclick="closeFormModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editId">
+            <div class="form-group">
+                <label>Titulo *</label>
+                <input type="text" id="fTitulo" placeholder="Ex: Erro 0x800F0922 Windows Update">
+            </div>
+            <div class="form-group">
+                <label>Categoria *</label>
+                <select id="fCategoria">
+                    <option value="erro">Erro / Problema</option>
+                    <option value="instalacao">Instalação de Programa</option>
+                    <option value="comando">Comando Útil</option>
+                    <option value="tutorial">Tutorial / Passo a Passo</option>
+                    <option value="impressora">Impressora</option>
+                    <option value="link">Link / Download</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Problema / Descrição *</label>
+                <textarea id="fProblema" placeholder="Descreva o erro, sintoma ou o que precisa ser feito..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Solução / Passo a Passo *</label>
+                <textarea id="fSolucao" placeholder="Escreva a solução, comandos, links, etc...&#10;&#10;Dica: Use linhas separadas para cada passo.&#10;Coloque links completos (https://...) que serão clicáveis."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Tags</label>
+                <input type="text" id="fTags" placeholder="Ex: windows, impressora, rede (separar por virgula)">
+                <small>Ajuda a encontrar depois. Separe por vírgula.</small>
+            </div>
+            <div class="form-group">
+                <label>Imagens (prints de erro, screenshots)</label>
+                <div class="image-upload-area" id="uploadArea" onclick="document.getElementById('imgInput').click()">
+                    Clique aqui ou arraste imagens para anexar
+                </div>
+                <input type="file" id="imgInput" accept="image/*" multiple style="display:none" onchange="handleImageSelect(event)">
+                <div class="image-previews" id="imagePreviews"></div>
+                <small>Formatos: JPG, PNG, GIF. Maximo recomendado: 3 imagens por registro.</small>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-secondary" onclick="closeFormModal()">Cancelar</button>
+            <button class="btn btn-primary" onclick="saveEntry()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL VIEW -->
+<div class="modal-overlay" id="viewModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="viewTitle">Detalhes</h2>
+            <button class="modal-close" onclick="closeViewModal()">&times;</button>
+        </div>
+        <div class="modal-body view-content" id="viewBody"></div>
+    </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Imagem ampliada">
+</div>
+
+<!-- HIDDEN FILE INPUT -->
+<input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleImport(event)">
+
+<script>
+    // ===== DATA =====
+    const STORAGE_KEY = 'kb_entries';
+    const CONFIG_KEY = 'kb_github_config';
+    let currentFilter = 'todos';
+    let tempImages = [];
+    let cachedEntries = [];
+    let fileSha = null;
+    let isSyncing = false;
+
+    // ===== GITHUB CONFIG =====
+    function getConfig() {
+        try { return JSON.parse(localStorage.getItem(CONFIG_KEY)) || null; } catch { return null; }
+    }
+
+    function openConfigModal() {
+        const cfg = getConfig();
+        document.getElementById('cfgToken').value = cfg ? cfg.token : '';
+        document.getElementById('cfgRepo').value = cfg ? cfg.repo : '';
+        document.getElementById('cfgPath').value = cfg ? cfg.path : 'data.json';
+        document.getElementById('cfgBranch').value = cfg ? cfg.branch : 'main';
+        document.getElementById('configModal').classList.add('active');
+    }
+
+    function closeConfigModal() {
+        document.getElementById('configModal').classList.remove('active');
+    }
+
+    function saveConfig() {
+        const token = document.getElementById('cfgToken').value.trim();
+        const repo = document.getElementById('cfgRepo').value.trim();
+        const path = document.getElementById('cfgPath').value.trim() || 'data.json';
+        const branch = document.getElementById('cfgBranch').value.trim() || 'main';
+        if (!token || !repo) { alert('Preencha Token e Repositorio.'); return; }
+        localStorage.setItem(CONFIG_KEY, JSON.stringify({ token, repo, path, branch }));
+        closeConfigModal();
+        showSync('Conectando...', '#f39c12');
+        loadFromGitHub();
+    }
+
+    function clearConfig() {
+        if (!confirm('Limpar configuracao do GitHub?')) return;
+        localStorage.removeItem(CONFIG_KEY);
+        closeConfigModal();
+        hideSyncBar();
+    }
+
+    // ===== SYNC STATUS =====
+    function showSync(msg, color) {
+        const bar = document.getElementById('syncBar');
+        const status = document.getElementById('syncStatus');
+        bar.style.display = 'block';
+        status.innerHTML = msg;
+        status.style.color = color || '#8899aa';
+    }
+
+    function hideSyncBar() {
+        document.getElementById('syncBar').style.display = 'none';
+    }
+
+    // ===== LOCAL STORAGE (fallback) =====
+    function getEntries() {
+        return cachedEntries;
+    }
+
+    function getEntriesFromLocal() {
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; }
+    }
+
+    function saveEntriesToLocal(entries) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    // ===== GITHUB API =====
+    async function loadFromGitHub() {
+        const cfg = getConfig();
+        if (!cfg) {
+            cachedEntries = getEntriesFromLocal();
+            render();
+            return;
+        }
+
+        isSyncing = true;
+        showSync('Carregando dados do GitHub...', '#00d4ff');
+
+        try {
+            const res = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`, {
+                headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
+            });
+
+            if (res.status === 404) {
+                // File doesn't exist yet, create it
+                cachedEntries = getEntriesFromLocal();
+                fileSha = null;
+                showSync('Arquivo nao encontrado no GitHub. Sera criado ao salvar.', '#f39c12');
+                render();
+                isSyncing = false;
+                return;
+            }
+
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+            const data = await res.json();
+            fileSha = data.sha;
+            const content = atob(data.content.replace(/\n/g, ''));
+            const decoded = new TextDecoder().decode(Uint8Array.from(content, c => c.charCodeAt(0)));
+            cachedEntries = JSON.parse(decoded);
+            saveEntriesToLocal(cachedEntries);
+            showSync(`Sincronizado com GitHub - ${cachedEntries.length} registros`, '#27ae60');
+            render();
+        } catch (err) {
+            console.error('GitHub load error:', err);
+            cachedEntries = getEntriesFromLocal();
+            showSync('Erro ao conectar ao GitHub. Usando dados locais. ' + err.message, '#e74c3c');
+            render();
+        }
+        isSyncing = false;
+    }
+
+    async function saveToGitHub(entries) {
+        const cfg = getConfig();
+        if (!cfg) return;
+
+        showSync('Salvando no GitHub...', '#f39c12');
+
+        try {
+            // Get current SHA first (in case someone else changed the file)
+            try {
+                const getRes = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}`, {
+                    headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+                if (getRes.ok) {
+                    const getData = await getRes.json();
+                    fileSha = getData.sha;
+                }
+            } catch {}
+
+            const content = new TextEncoder().encode(JSON.stringify(entries, null, 2));
+            let binary = '';
+            content.forEach(b => binary += String.fromCharCode(b));
+            const base64 = btoa(binary);
+
+            const body = {
+                message: `Atualizar base de conhecimento - ${new Date().toLocaleString('pt-BR')}`,
+                content: base64,
+                branch: cfg.branch
+            };
+
+            if (fileSha) body.sha = fileSha;
+
+            const res = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${cfg.path}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${cfg.token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.message || `HTTP ${res.status}`);
+            }
+
+            const result = await res.json();
+            fileSha = result.content.sha;
+            showSync(`Salvo no GitHub com sucesso - ${entries.length} registros`, '#27ae60');
+        } catch (err) {
+            console.error('GitHub save error:', err);
+            showSync('Erro ao salvar no GitHub: ' + err.message + ' (dados salvos localmente)', '#e74c3c');
+        }
+    }
+
+    // ===== SAVE ENTRIES (local + GitHub) =====
+    async function saveEntries(entries) {
+        cachedEntries = entries;
+        saveEntriesToLocal(entries);
+        render();
+        await saveToGitHub(entries);
+    }
+
+    // ===== CATEGORY LABELS =====
+    const catLabels = {
+        erro: 'Erro',
+        instalacao: 'Instalação',
+        comando: 'Comando',
+        tutorial: 'Tutorial',
+        impressora: 'Impressora',
+        link: 'Link/Download',
+        outro: 'Outro'
+    };
+
+    // ===== RENDER =====
+    function render() {
+        const entries = getEntries();
+        const search = document.getElementById('searchInput').value.toLowerCase();
+
+        const filtered = entries.filter(e => {
+            const matchCat = currentFilter === 'todos' || e.categoria === currentFilter;
+            const matchSearch = !search ||
+                e.titulo.toLowerCase().includes(search) ||
+                e.problema.toLowerCase().includes(search) ||
+                e.solucao.toLowerCase().includes(search) ||
+                (e.tags || []).some(t => t.toLowerCase().includes(search));
+            return matchCat && matchSearch;
+        });
+
+        // Stats
+        const statsEl = document.getElementById('stats');
+        const counts = {};
+        entries.forEach(e => { counts[e.categoria] = (counts[e.categoria] || 0) + 1; });
+        statsEl.innerHTML = `
+            <div class="stat-card">
+                <div class="number">${entries.length}</div>
+                <div class="label">Total de Registros</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">${counts.erro || 0}</div>
+                <div class="label">Erros</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">${counts.tutorial || 0}</div>
+                <div class="label">Tutoriais</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">${counts.comando || 0}</div>
+                <div class="label">Comandos</div>
+            </div>
+        `;
+
+        // Cards
+        const grid = document.getElementById('cardsGrid');
+        const empty = document.getElementById('emptyState');
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '';
+            empty.style.display = 'block';
+            return;
+        }
+
+        empty.style.display = 'none';
+
+        // Sort: newest first
+        filtered.sort((a, b) => new Date(b.criadoEm) - new Date(a.criadoEm));
+
+        grid.innerHTML = filtered.map(e => {
+            const tags = (e.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+            const date = new Date(e.criadoEm).toLocaleDateString('pt-BR');
+            const hasImg = (e.imagens && e.imagens.length > 0) ? '<span class="card-has-img">📷 ' + e.imagens.length + '</span>' : '';
+            return `
+                <div class="card" onclick="viewEntry('${e.id}')">
+                    <div class="card-header">
+                        <div class="card-title">${escapeHtml(e.titulo)}${hasImg}</div>
+                        <span class="card-category cat-${e.categoria}">${catLabels[e.categoria] || e.categoria}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-desc">${escapeHtml(e.problema)}</div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tags">${tags}</div>
+                        <span>${date}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ===== UTILITIES =====
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function linkify(text) {
+        const escaped = escapeHtml(text);
+        return escaped.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    }
+
+    function generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
+
+    // ===== FILTER =====
+    function setFilter(cat, btn) {
+        currentFilter = cat;
+        document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+    }
+
+    function filterCards() { render(); }
+
+    // ===== FORM MODAL =====
+    function openFormModal(id) {
+        const modal = document.getElementById('formModal');
+        document.getElementById('editId').value = '';
+        document.getElementById('formTitle').textContent = 'Novo Registro';
+        document.getElementById('fTitulo').value = '';
+        document.getElementById('fCategoria').value = 'erro';
+        document.getElementById('fProblema').value = '';
+        document.getElementById('fSolucao').value = '';
+        document.getElementById('fTags').value = '';
+        tempImages = [];
+        renderImagePreviews();
+
+        if (id) {
+            const entry = getEntries().find(e => e.id === id);
+            if (entry) {
+                document.getElementById('editId').value = entry.id;
+                document.getElementById('formTitle').textContent = 'Editar Registro';
+                document.getElementById('fTitulo').value = entry.titulo;
+                document.getElementById('fCategoria').value = entry.categoria;
+                document.getElementById('fProblema').value = entry.problema;
+                document.getElementById('fSolucao').value = entry.solucao;
+                document.getElementById('fTags').value = (entry.tags || []).join(', ');
+                tempImages = [...(entry.imagens || [])];
+                renderImagePreviews();
+            }
+        }
+
+        modal.classList.add('active');
+        document.getElementById('fTitulo').focus();
+    }
+
+    function closeFormModal() {
+        document.getElementById('formModal').classList.remove('active');
+    }
+
+    async function saveEntry() {
+        const titulo = document.getElementById('fTitulo').value.trim();
+        const categoria = document.getElementById('fCategoria').value;
+        const problema = document.getElementById('fProblema').value.trim();
+        const solucao = document.getElementById('fSolucao').value.trim();
+        const tagsStr = document.getElementById('fTags').value.trim();
+        const editId = document.getElementById('editId').value;
+
+        if (!titulo || !problema || !solucao) {
+            alert('Preencha os campos obrigatórios: Título, Problema e Solução.');
+            return;
+        }
+
+        const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+        const entries = [...getEntries()];
+
+        if (editId) {
+            const idx = entries.findIndex(e => e.id === editId);
+            if (idx !== -1) {
+                entries[idx] = { ...entries[idx], titulo, categoria, problema, solucao, tags, imagens: [...tempImages], editadoEm: new Date().toISOString() };
+            }
+        } else {
+            entries.push({
+                id: generateId(),
+                titulo,
+                categoria,
+                problema,
+                solucao,
+                tags,
+                imagens: [...tempImages],
+                criadoEm: new Date().toISOString()
+            });
+        }
+
+        closeFormModal();
+        await saveEntries(entries);
+    }
+
+    // ===== VIEW MODAL =====
+    function viewEntry(id) {
+        const entry = getEntries().find(e => e.id === id);
+        if (!entry) return;
+
+        document.getElementById('viewTitle').textContent = entry.titulo;
+
+        const date = new Date(entry.criadoEm).toLocaleDateString('pt-BR');
+        const editDate = entry.editadoEm ? ` (editado ${new Date(entry.editadoEm).toLocaleDateString('pt-BR')})` : '';
+        const tags = (entry.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join(' ');
+
+        const imagesHtml = (entry.imagens && entry.imagens.length > 0)
+            ? '<h3>Imagens</h3><div class="view-images">' + entry.imagens.map(img => `<img src="${img}" alt="Screenshot" onclick="openLightbox(this.src, event)">`).join('') + '</div>'
+            : '';
+
+        document.getElementById('viewBody').innerHTML = `
+            <div class="view-meta">
+                <span class="card-category cat-${entry.categoria}">${catLabels[entry.categoria]}</span>
+                <span style="color:#607080; font-size:.85rem;">Criado em ${date}${editDate}</span>
+                ${tags}
+            </div>
+            <h3>Problema / Descrição</h3>
+            <pre>${linkify(entry.problema)}</pre>
+            <h3>Solução / Passo a Passo</h3>
+            <pre>${linkify(entry.solucao)}</pre>
+            ${imagesHtml}
+            <div class="view-actions">
+                <button class="btn btn-edit" onclick="closeViewModal(); openFormModal('${entry.id}')">Editar</button>
+                <button class="btn btn-danger" onclick="deleteEntry('${entry.id}')">Excluir</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard('${entry.id}')">Copiar Solução</button>
+            </div>
+        `;
+
+        document.getElementById('viewModal').classList.add('active');
+    }
+
+    function closeViewModal() {
+        document.getElementById('viewModal').classList.remove('active');
+    }
+
+    async function deleteEntry(id) {
+        if (!confirm('Tem certeza que deseja excluir este registro?')) return;
+        const entries = getEntries().filter(e => e.id !== id);
+        closeViewModal();
+        await saveEntries(entries);
+    }
+
+    function copyToClipboard(id) {
+        const entry = getEntries().find(e => e.id === id);
+        if (!entry) return;
+        navigator.clipboard.writeText(entry.solucao).then(() => {
+            alert('Solução copiada!');
+        });
+    }
+
+    // ===== EXPORT / IMPORT =====
+    function exportData() {
+        const entries = getEntries();
+        if (entries.length === 0) { alert('Nenhum dado para exportar.'); return; }
+        const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `base-conhecimento-backup-${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+
+    function importData() {
+        document.getElementById('fileInput').click();
+    }
+
+    async function handleImport(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (!Array.isArray(imported)) throw new Error('Formato inválido');
+                const current = [...getEntries()];
+                const existingIds = new Set(current.map(c => c.id));
+                let added = 0;
+                imported.forEach(entry => {
+                    if (!existingIds.has(entry.id)) {
+                        current.push(entry);
+                        added++;
+                    }
+                });
+                await saveEntries(current);
+                alert(`Importação concluída! ${added} novos registros adicionados.`);
+            } catch (err) {
+                alert('Erro ao importar: arquivo inválido.');
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+    }
+
+    // ===== IMAGE HANDLING =====
+    function handleImageSelect(event) {
+        const files = Array.from(event.target.files);
+        processImageFiles(files);
+        event.target.value = '';
+    }
+
+    function processImageFiles(files) {
+        files.forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+            if (file.size > 2 * 1024 * 1024) {
+                alert(`Imagem "${file.name}" muito grande (max 2MB). Tente reduzir o tamanho.`);
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width, h = img.height;
+                    const maxDim = 800;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+                        else { w = Math.round(w * maxDim / h); h = maxDim; }
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    const compressed = canvas.toDataURL('image/jpeg', 0.6);
+                    tempImages.push(compressed);
+                    renderImagePreviews();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function renderImagePreviews() {
+        const container = document.getElementById('imagePreviews');
+        container.innerHTML = tempImages.map((img, i) => `
+            <div class="image-preview-item">
+                <img src="${img}" alt="Preview">
+                <button class="remove-img" onclick="removeImage(${i})" title="Remover">&times;</button>
+            </div>
+        `).join('');
+    }
+
+    function removeImage(index) {
+        tempImages.splice(index, 1);
+        renderImagePreviews();
+    }
+
+    // Drag and drop
+    (function() {
+        const area = document.getElementById('uploadArea');
+        area.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            area.classList.add('dragover');
+        });
+        area.addEventListener('dragleave', function() {
+            area.classList.remove('dragover');
+        });
+        area.addEventListener('drop', function(e) {
+            e.preventDefault();
+            area.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            processImageFiles(files);
+        });
+    })();
+
+    // Lightbox
+    function openLightbox(src, event) {
+        event.stopPropagation();
+        document.getElementById('lightboxImg').src = src;
+        document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+
+    // Paste image from clipboard into form
+    document.addEventListener('paste', function(e) {
+        const formModal = document.getElementById('formModal');
+        if (!formModal.classList.contains('active')) return;
+        const items = Array.from(e.clipboardData.items);
+        const imageFiles = items.filter(i => i.type.startsWith('image/')).map(i => i.getAsFile());
+        if (imageFiles.length > 0) {
+            processImageFiles(imageFiles);
+        }
+    });
+
+    // ===== KEYBOARD SHORTCUTS =====
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeLightbox();
+            closeFormModal();
+            closeViewModal();
+            closeConfigModal();
+        }
+        if (e.ctrlKey && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('searchInput').focus();
+        }
+    });
+
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFormModal();
+                closeViewModal();
+                closeConfigModal();
+            }
+        });
+    });
+
+    // ===== INIT =====
+    loadFromGitHub();
+</script>
+
+</body>
+</html>
