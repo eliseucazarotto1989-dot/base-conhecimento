@@ -343,22 +343,5 @@
     "id": "19e0d144b05bjtuy",
     "imagens": [],
     "criadoEm": "2026-05-09T11:11:34.287650"
-  },
-  {
-    "titulo": "Resetar Senha de Usuario do Windows",
-    "categoria": "tutorial",
-    "problema": "Cliente esqueceu a senha do Windows, nao consegue entrar no PC.",
-    "solucao": "METODO 1 - Conta Microsoft (online):\n   Acessar de outro dispositivo: https://account.live.com/resetpassword.aspx\n   Seguir procedimento de recuperacao\n\nMETODO 2 - CMD pelo Reparo (conta local):\n1. Boot pelo pendrive do Windows\n2. Reparar > Solucao de Problemas > Prompt de Comando\n3. Substituir Utilman por CMD:\n   move C:\\Windows\\System32\\Utilman.exe C:\\Windows\\System32\\Utilman.exe.bak\n   copy C:\\Windows\\System32\\cmd.exe C:\\Windows\\System32\\Utilman.exe\n4. Reiniciar sem pendrive\n5. Na tela de login, clicar no icone de Acessibilidade (abre CMD)\n6. Trocar a senha:\n   net user NomeDoUsuario NovaSenha\n7. Entrar com a nova senha\n8. IMPORTANTE - Restaurar Utilman:\n   CMD Admin:\n   move C:\\Windows\\System32\\Utilman.exe.bak C:\\Windows\\System32\\Utilman.exe\n\nMETODO 3 - Hiren's Boot:\n   Baixar Hiren's BootCD PE\n   Boot pelo pendrive > Windows Login Unlocker",
-    "tags": [
-      "senha",
-      "esqueceu",
-      "resetar",
-      "login",
-      "conta",
-      "utilman"
-    ],
-    "id": "19e0d144b0fgjbel",
-    "imagens": [],
-    "criadoEm": "2026-05-09T11:11:34.298409"
   }
 ]
