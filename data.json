@@ -299,8 +299,8 @@
   {
     "titulo": "Programas Essenciais - Lista de Instalacao",
     "categoria": "link",
-    "problema": "Lista de programas basicos para instalar apos formatacao.",
-    "solucao": "NAVEGADOR:\n   Google Chrome: https://www.google.com/chrome\n   Firefox: https://www.mozilla.org/firefox\n\nLEITOR PDF:\n   Adobe Reader: https://get.adobe.com/br/reader\n   Foxit Reader: https://www.foxit.com/pdf-reader\n\nCOMPACTADOR:\n   WinRAR: https://www.win-rar.com\n   7-Zip: https://www.7-zip.org\n\nOFFICE:\n   LibreOffice (gratuito): https://www.libreoffice.org\n\nANTIVIRUS:\n   Windows Defender (ja vem no Windows)\n   Kaspersky Free: https://www.kaspersky.com.br/free-antivirus\n\nUTILITARIOS:\n   CrystalDiskInfo (saude do disco): https://crystalmark.info/en/software/crystaldiskinfo\n   HWMonitor (temperatura): https://www.cpuid.com/softwares/hwmonitor.html\n   CPU-Z (info hardware): https://www.cpuid.com/softwares/cpu-z.html\n   TreeSize (espaco em disco): https://www.jam-software.com/treesize_free\n\nACESSO REMOTO:\n   AnyDesk: https://anydesk.com\n   RustDesk: https://rustdesk.com\n\nDRIVERS:\n   Snappy Driver: https://www.snappy-driver-installer.org\n   Driver Booster: https://www.iobit.com/pt/driver-booster.php",
+    "problema": "Site para instalar programas automaticamente\nwww.ninite.com",
+    "solucao": "www.ninite.com\n\nBasta selecionar os programas desejados, baixar o instalador e abri-lo. \nApós isso é só aguardar",
     "tags": [
       "programas",
       "instalacao",
@@ -310,7 +310,8 @@
     ],
     "id": "19e0d144af08vqlq",
     "imagens": [],
-    "criadoEm": "2026-05-09T11:11:34.266899"
+    "criadoEm": "2026-05-09T11:11:34.266899",
+    "editadoEm": "2026-05-11T20:02:20.431Z"
   },
   {
     "titulo": "Erro \"Acesso Negado\" em Pastas/Arquivos",
@@ -343,22 +344,5 @@
     "id": "19e0d144b05bjtuy",
     "imagens": [],
     "criadoEm": "2026-05-09T11:11:34.287650"
-  },
-  {
-    "titulo": "Resetar Senha de Usuario do Windows",
-    "categoria": "tutorial",
-    "problema": "Cliente esqueceu a senha do Windows, nao consegue entrar no PC.",
-    "solucao": "METODO 1 - Conta Microsoft (online):\n   Acessar de outro dispositivo: https://account.live.com/resetpassword.aspx\n   Seguir procedimento de recuperacao\n\nMETODO 2 - CMD pelo Reparo (conta local):\n1. Boot pelo pendrive do Windows\n2. Reparar > Solucao de Problemas > Prompt de Comando\n3. Substituir Utilman por CMD:\n   move C:\\Windows\\System32\\Utilman.exe C:\\Windows\\System32\\Utilman.exe.bak\n   copy C:\\Windows\\System32\\cmd.exe C:\\Windows\\System32\\Utilman.exe\n4. Reiniciar sem pendrive\n5. Na tela de login, clicar no icone de Acessibilidade (abre CMD)\n6. Trocar a senha:\n   net user NomeDoUsuario NovaSenha\n7. Entrar com a nova senha\n8. IMPORTANTE - Restaurar Utilman:\n   CMD Admin:\n   move C:\\Windows\\System32\\Utilman.exe.bak C:\\Windows\\System32\\Utilman.exe\n\nMETODO 3 - Hiren's Boot:\n   Baixar Hiren's BootCD PE\n   Boot pelo pendrive > Windows Login Unlocker",
-    "tags": [
-      "senha",
-      "esqueceu",
-      "resetar",
-      "login",
-      "conta",
-      "utilman"
-    ],
-    "id": "19e0d144b0fgjbel",
-    "imagens": [],
-    "criadoEm": "2026-05-09T11:11:34.298409"
   }
 ]
